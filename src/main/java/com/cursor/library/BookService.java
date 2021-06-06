@@ -39,4 +39,27 @@ public class BookService {
     public Book findById(String bookId) {
         return bookRepo.findById(bookId);
     }
+
+    public List<Book> getPaginBook(Integer limit, Integer offset) {
+        return bookRepo.getPaginationBooks(limit, offset);
+    }
+
+    public List<Book> getSortedBooks(String sort) {
+        return bookRepo.getSortedBooks(sort);
+    }
+
+    public List<Book> getByAuthor(String author) {
+        final String s = author.replaceAll("_", " ");
+        System.out.println(s);
+        return bookRepo.getByAuthor(author.replaceAll("_", " "));
+    }
+
+    public Book updateBook(String bookId, String name, String author, Integer year, String genre) {
+        return bookRepo.updateBook(bookId,
+                name.trim(),
+                author == null ? null : author.trim(),
+                year,
+                genre == null ? null : genre.trim());
+
+    }
 }

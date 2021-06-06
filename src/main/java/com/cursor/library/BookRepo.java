@@ -3,6 +3,7 @@ package com.cursor.library;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class BookRepo {
@@ -38,5 +39,41 @@ public class BookRepo {
 
     public Book findById(String bookId) {
         return books.get(bookId);
+    }
+
+    public List<Book> getPaginationBooks(Integer limit, Integer offset) {
+        final ArrayList<Book> listBook = new ArrayList<>(books.values());
+        final int size = listBook.size();
+        if (offset >= size) {
+            return Collections.emptyList();
+        } else if (limit > size || offset + limit > size) {
+            return listBook.subList(offset, size);
+        }
+        return listBook.subList(offset, offset + limit);
+    }
+
+    public List<Book> getSortedBooks(String sort) {
+        final ArrayList<Book> listBook = new ArrayList<>(books.values());
+        if (sort.equals("name")) {
+            listBook.sort(Comparator.comparing(Book::getName).thenComparing(Book::getYear));
+        } else if (sort.equals("author")) {
+            listBook.sort(Comparator.comparing(Book::getAuthor).thenComparing(Book::getYear));
+        } else if (sort.equals("genre")) {
+            listBook.sort(Comparator.comparing(Book::getGenre).thenComparing(Book::getYear));
+        } else {
+            listBook.sort(Comparator.comparing(Book::getYear));
+        }
+        return listBook;
+    }
+
+    public List<Book> getByAuthor(String author) {
+        return books.values().stream()
+                .filter(book -> book.getAuthor().equals(author))
+                .collect(Collectors.toList());
+    }
+
+    public Book updateBook(String bookId, String name, String author, Integer year, String genre) {
+        final Book newBook = new Book(bookId, name, author, year, genre);
+        return books.put(newBook.getId(), newBook);
     }
 }
