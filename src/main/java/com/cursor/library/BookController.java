@@ -28,7 +28,7 @@ public class BookController {
         return ResponseEntity.ok(book);
     }
 
-    @PostMapping(
+    @PutMapping(
             value = "/books/update/{bookId}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
