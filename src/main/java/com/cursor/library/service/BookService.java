@@ -1,5 +1,8 @@
-package com.cursor.library;
+package com.cursor.library.service;
 
+import com.cursor.library.entity.Book;
+import com.cursor.library.exception.CreateBookException;
+import com.cursor.library.repository.BookRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,6 +63,5 @@ public class BookService {
                 author == null ? null : author.trim(),
                 year,
                 genre == null ? null : genre.trim());
-
     }
 }
