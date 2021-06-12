@@ -7,11 +7,14 @@ import com.cursor.library.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
+@Secured({"ROLE_ADMIN", "ROLE_WRITE", "ROLE_READ"})
 public class BookController {
 
     private final BookService bookService;
@@ -20,6 +23,7 @@ public class BookController {
         this.bookService = bookService;
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping(
             value = "/books",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -32,6 +36,7 @@ public class BookController {
         return ResponseEntity.ok(book);
     }
 
+    @Secured({"ROLE_READ", "ROLE_WRITE"})
     @PutMapping(
             value = "/books/update/{bookId}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -83,6 +88,7 @@ public class BookController {
                 new ResponseEntity<>(bookService.getByAuthor(author), HttpStatus.OK);
     }
 
+    @Secured({"ROLE_READ"})
     @GetMapping(
             value = "/books/{bookId}",
             produces = MediaType.APPLICATION_JSON_VALUE
